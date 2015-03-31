@@ -48,5 +48,88 @@ buildMinHeap heap i
 heapsort :: [Int] -> [Int]
 heapsort list 
 	| length list < 2 = list
-	| otherwise = [head heap] ++ heapsort (minHeapify (tail heap) 1)
+	| otherwise = [head heap] ++ heapsort (minHeapify (tail heap) 0)
 		where heap = buildMinHeap list ((length list) `div` 2)
+		
+-- ## Exercícios em sala ##
+
+-- Função: menorMaior
+-- Dados três inteiros a, b, c, retorna o par ordenado (x, y), onde x = min{a, b, c} e y = max{a, b, c}
+-- Funções auxiliares: max, min (para 2 inteiros)
+
+max :: Int -> Int -> Int
+max a b
+	| a > b = a
+	| otherwise = b
+
+min :: Int -> Int -> Int
+min a b
+	| a < b = a
+	| otherwise = b
+
+menorMaior :: Int -> Int -> Int -> (Int, Int)
+menorMaior a b c
+	| (a < b) && (b < c)= (a, c)
+	| (a >= b) = ((min b c), (max a c))
+	| otherwise = (a, b)
+	
+-- Função: ordenaTripla
+-- Dada uma tripla (x1, x2, x3), retorna uma tripla (y1, y2, y3) tal que y1 <= y2 <= y3 e x_i = y_j numa certa ordem, 1 <= i, j <= 3.
+
+ordenaTripla :: (Int, Int, Int) -> (Int, Int, Int)
+ordenaTripla (a, b, c) = (x, y, z)
+	where 
+		x = fst (menorMaior a b c)
+		z = snd (menorMaior a b c)
+		y = (a + b + c) - (x + y)
+		
+-- Tipos: Ponto e Reta
+
+type Ponto = (Float, Float)
+type Reta = (Ponto, Ponto)
+
+-- Funções: firstCoordinate, secondCoordinate
+-- Dado um ponto P = (x, y), retornam x e y, respectivamente.
+
+firstCoordinate :: Ponto -> Float
+firstCoordinate p = fst p
+
+secondCoordinate :: Ponto -> Float
+firstCoordinate p = snd p
+
+-- Função: isVertical
+-- Dada uma reta r definida por dois pontos x1 e x2, retorna True se x1 == x2 ou False, caso contrário.
+
+isVertical :: Reta -> Bool
+isVertical line
+	| fst line == snd line = True
+	| otherwise = False
+	
+pontoY :: Float -> Reta -> Float
+pontoY x line
+	| isVertical line = error "Infinite solutions."
+	| otherwise = (y2 - y1)*(x - x1) / (x2 - x1) 
+		where	
+			x1 = fst (fst line)
+			x2 = fst (snd line)
+			y1 = snd (fst line)
+			y2 = snd (snd line)
+
+
+-- Tipos de dados da questão
+			
+type Pessoa = String
+type Livro = String
+type BancoDados = [(Pessoa, Livro)]
+
+baseExemplo :: BancoDados
+baseExemplo = [(”Sergio”,”O Senhor dos Aneis”), (”Andre”,”Duna”), (”Fernando”,”Jonathan Strange & Mr. Norrell”), (”Fernando”,”A Game of Thrones”)]
+
+-- ## As funções abaixo devem utilizar compreensão de listas ##
+
+-- Função: membro
+-- Dada uma lista de inteiros e um inteiro, retorna True se x pertence à lista ou False, caso contrário.
+
+membro :: [Int] -> Int -> Bool
+membro list member = (length ([x | x <- list, x == member]) > 0
+

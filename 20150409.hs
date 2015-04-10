@@ -1,3 +1,5 @@
+import Data.Char (ord)
+
 -- ## Trabalho 6 (09/04/2015) ##
 
 -- Questão 1
@@ -44,4 +46,48 @@ isGraphVertex (Graph vertices edges) value
 	| otherwise = isGraphVertex (Graph newVertices edges) value
 		where
 			marked = (dfs (Graph vertices edges) (head vertices) [])
-			newVertices = [x | x <- vertices, not (isElement x marked)] 
+			newVertices = [x | x <- vertices, not (isElement x marked)]
+
+-- ## Exercícios em sala (09/04/2015) ##
+
+-- Questão 1
+
+sqrtList :: [Float] -> [Float]
+sqrtList list = map sqrt list
+
+-- Questão 2
+
+getCharPosition :: Char -> Int
+getCharPosition character
+	| character >= 'a' && character <= 'z' = ord character - ord 'a' + 1
+	| character >= 'A' && character <= 'Z' = ord character - ord 'A' + 1
+	| otherwise = error "Invalid character."
+
+
+posicaoAlfabeto :: String -> [Int]
+posicaoAlfabeto str = map getCharPosition str
+
+-- Questão 3
+
+mapFunction :: (a -> b) -> [a] -> [b]
+mapFunction f list = [f (x) | x <- list]
+
+-- Questão 4
+
+member :: (Eq t) => t -> [t] -> Bool
+member x list = foldr (||) False (map (== x) list)
+
+isElement2 :: (Eq t) => t -> [t] -> Bool
+isElement2 v list
+	| list == [] = False
+	| (head list) == v = True
+	| otherwise = isElement2 v (tail list)
+
+listToSet2 :: (Eq t) => [t] -> [t]
+listToSet2 list
+	| list == [] = []
+	| isElement2 (head list) (tail list) = listToSet2 (tail list)
+	| otherwise = [head list] ++ listToSet2 (tail list)
+
+union :: (Eq t) => [t] -> [t] -> [t]
+union listA listB = listToSet2 (foldr (++) [] [listA, listB])

@@ -39,6 +39,41 @@ lookAndSay n = term_by_term (n-1) [1]
 
 --	##### Questão 3 #####
 
+type Vertex t = t
+type Edge t = (t, t)
+type Graph t = ([Vertex t], [Edge (Vertex t)])
+
+-- Testing data
+
+myGraph :: Graph Int
+myGraph = ([1, 2, 3, 4, 5], [(1, 2), (1, 4), (2, 1), (2, 3), (3, 2), (3, 5), (4, 1), (5, 3)])
+
+-- Functions
+
+quicksort :: (Ord t) => [t] -> [t]
+quicksort items
+	| length items < 2 = items
+	| otherwise = quicksort [x | x <- tail items, x <= head items] ++ [head items] ++ [x | x <- tail items, x > head items]
+
+isElementOf :: (Ord t) => Vertex t -> [Vertex t] -> Bool
+isElementOf v list
+	| list == [] = False
+	| v == (head list) = True
+	| otherwise = isElementOf v (tail list)
+	
+findPath :: (Ord t) => Graph t -> Vertex t -> Vertex t -> [Vertex t] -> [Edge (Vertex t)] -> [Edge (Vertex t)]
+findPath graph src dst marked path
+	| src == dst = path
+	| edges == [] = []
+	| otherwise = findPath graph (snd (head edges)) dst ([src] ++ marked) (path ++ [head edges])
+		where 
+			reachable = [(a, b) | (a, b) <- snd graph, (a == src)]
+			edges = [x | x <- reachable, not (isElementOf (snd x) marked)]
+			
+search :: (Ord t) => Graph t -> Vertex t -> Vertex t -> [Edge (Vertex t)]
+search graph src dst = findPath graph src dst [] []
+
+
 --	##### Questão 4 #####
 -- # Terminar função #
 --filtroMediana :: [[Int]] -> Int -> [[Int]]

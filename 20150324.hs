@@ -55,17 +55,6 @@ heapsort list
 
 -- Função: menorMaior
 -- Dados três inteiros a, b, c, retorna o par ordenado (x, y), onde x = min{a, b, c} e y = max{a, b, c}
--- Funções auxiliares: max, min (para 2 inteiros)
-
-max :: Int -> Int -> Int
-max a b
-	| a > b = a
-	| otherwise = b
-
-min :: Int -> Int -> Int
-min a b
-	| a < b = a
-	| otherwise = b
 
 menorMaior :: Int -> Int -> Int -> (Int, Int)
 menorMaior a b c
@@ -95,7 +84,7 @@ firstCoordinate :: Ponto -> Float
 firstCoordinate p = fst p
 
 secondCoordinate :: Ponto -> Float
-firstCoordinate p = snd p
+secondCoordinate p = snd p
 
 -- Função: isVertical
 -- Dada uma reta r definida por dois pontos x1 e x2, retorna True se x1 == x2 ou False, caso contrário.
@@ -123,7 +112,7 @@ type Livro = String
 type BancoDados = [(Pessoa, Livro)]
 
 baseExemplo :: BancoDados
-baseExemplo = [(”Sergio”,”O Senhor dos Aneis”), (”Andre”,”Duna”), (”Fernando”,”Jonathan Strange & Mr. Norrell”), (”Fernando”,”A Game of Thrones”)]
+baseExemplo = [("Sergio","O Senhor dos Aneis"), ("Andre","Duna"), ("Fernando","Jonathan Strange & Mr. Norrell"), ("Fernando","A Game of Thrones")]
 
 -- ## As funções abaixo devem utilizar compreensão de listas ##
 
@@ -131,5 +120,34 @@ baseExemplo = [(”Sergio”,”O Senhor dos Aneis”), (”Andre”,”Duna”)
 -- Dada uma lista de inteiros e um inteiro, retorna True se x pertence à lista ou False, caso contrário.
 
 membro :: [Int] -> Int -> Bool
-membro list member = (length ([x | x <- list, x == member]) > 0
+membro list member = (length ([x | x <- list, x == member])) > 0
 
+-- Função: livros
+-- Dado um banco de dados e uma pessoa, retorna todos os livros relacionados àquela pessoa
+
+livros :: BancoDados -> Pessoa -> [Livro]
+livros database person = [b | (a, b) <- database, a == person]
+
+-- Função: emprestimos
+-- Dada uma base de dados e um livro, retorna os nomes de todas as pessoas que solicitaram empréstimo do livro
+
+emprestimos ::  BancoDados -> Livro ->[Pessoa]
+emprestimos database book = [a | (a, b) <- database, b == book]
+
+-- Função: emprestado
+-- Verifica se um livro já foi emprestado alguma vez
+
+emprestado :: BancoDados -> Livro -> Bool
+emprestado database book = (length (emprestimos database book)) > 0
+
+-- Função: qtdEmprestimos
+-- Retorna o número de vezes que uma pessoa solicitou empréstimo de algum livro
+
+qtdEmprestimos :: BancoDados -> Pessoa -> Int
+qtdEmprestimos database person = length (livros database person)
+
+-- Função: devolver
+-- Atualiza o banco de dados, removendo da lista o par que relaciona a pessoa ao livro emprestado
+
+devolver :: BancoDados -> Pessoa -> Livro -> BancoDados
+devolver database person book = [(a, b) | (a, b) <- database, not((a == person) && (b == book))]

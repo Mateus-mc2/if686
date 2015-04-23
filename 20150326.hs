@@ -53,3 +53,71 @@ comparaConjuntos listA listB
 			setA = listToSet listA
 			setB = listToSet listB
 			lAIntB = intersectionLength setA setB
+			
+-- ## Exercícios em sala (26/03/2015) ##
+
+-- Função: take
+-- Devolve os n primeiros elementos de uma lista
+
+take2 :: [t] -> Int -> [t]
+take2 list n 
+	| n == 0 = []
+	| otherwise = (head list):(take2 (tail list) (n-1))
+	
+-- Função: drop
+-- Remove os n primeiros elementos de uma lista
+
+drop2 :: [t] -> Int -> [t]
+drop2 list n
+	| n == 0 = list
+	| otherwise = drop2 (tail list) (n-1)
+	
+-- Função: takeWhile
+-- Devolve os n primeiros elementos da lista que satisfaçam um predicado
+
+takeWhile2 :: [t] -> (t -> Bool) -> [t]
+takeWhile2 list p
+	| not (p (head list)) = []
+	| otherwise = (head list):(takeWhile2 (tail list) p)
+
+-- Função: dropWhile
+-- Remove os n primeiros elementos da lista que satisfaçam um predicado
+
+dropWhile2 :: [t] -> (t -> Bool) -> [t]
+dropWhile2 list p
+	| not (p (head list)) = list
+	| otherwise = dropWhile2 (tail list) p
+	
+-- Função: quicksort (ordenar tipos genéricos)
+
+quicksort :: (Ord t) => [t] -> [t]
+quicksort list
+	| length list < 2 = list
+	| otherwise = (quicksort [x | x <- (tail list), x <= (head list)]) ++ [head list] ++ (quicksort [x | x <- (tail list), x > (head list)])
+	
+-- Função: agrupar
+-- Funções auxiliares: joinLists, countElem, mainAux
+
+joinLists :: (Eq t) => [[t]] -> [t]
+joinLists lists
+	| lists == [] = []
+	| otherwise = (head lists) ++ joinLists (tail lists)
+
+countElem :: (Eq t) => [t] -> t -> Int
+countElem list elem
+	| list == [] = 0
+	| (head list) == elem = 1 + countElem (tail list) elem
+	| otherwise = countElem (tail list) elem
+	
+mainAux :: (Eq t) => [t] -> [t] -> [(t, Int)]
+mainAux list set
+	| set == [] = []
+	| otherwise = [((head set), (countElem list (head set)))] ++ (mainAux newList (tail set))
+		where
+			newList = [x | x <- list, not (x == (head set))]
+
+agrupar :: (Eq t) => [[t]] -> [(t, Int)]
+agrupar lists = mainAux fullList fullSet
+	where
+		fullList = joinLists lists
+		fullSet = listToSet fullList

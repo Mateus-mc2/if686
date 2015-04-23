@@ -91,3 +91,12 @@ listToSet2 list
 
 union :: (Eq t) => [t] -> [t] -> [t]
 union listA listB = listToSet2 (foldr (++) [] [listA, listB])
+
+strToInt :: [String] -> [Int]
+strToInt strList
+	| strList == [] = []
+	| otherwise = (foldr (+) 0 charValues):(strToInt (tail strList))
+		where
+			charValues = [(ord c - ord 'a' + 1)  | c <- head strList, c >= 'a' && c <= 'z'] ++ [(ord c - ord 'A' + 1)  | c <- head strList, c >= 'A' && c <= 'Z']
+			
+-- Ainda falta implementar as demais.

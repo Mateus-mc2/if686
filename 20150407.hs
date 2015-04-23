@@ -49,9 +49,45 @@ data Tree t = NilT | Node t (Tree t) (Tree t) deriving (Eq, Ord, Show)
 -- Questão 4
 
 data Expr = Literal Int | Add Expr Expr | Subtract Expr Expr
-data List t = Nil | Constructor t (List t)
+data List t = Nil | Constructor t (List t) deriving Show
+
+-- Função: showExpr
 
 showExpr :: Expr -> String
 showExpr (Literal l) = show l
 showExpr (Add expr1 expr2) = "(" ++ (showExpr expr1) ++ ") + (" ++ (showExpr expr2) ++ ")"
 showExpr (Subtract expr1 expr2) = "(" ++ (showExpr expr1) ++ ") - (" ++ (showExpr expr2) ++ ")"
+
+-- Função: toList
+
+toList :: List t -> [t]
+toList Nil = []
+toList (Constructor val next) = (val):(toList next)
+
+-- Função: fromList
+
+fromList :: [t] -> List t
+fromList [] = Nil
+fromList (val:next) = Constructor val (fromList next)
+
+data Tree t = NilT | Node t (Tree t) (Tree t) deriving Show
+
+-- Função: depth
+
+depth :: Tree t -> Int
+depth NilT = 0
+depth (Node val left right) = 1 + max (depth left) (depth right)
+
+-- Função: collapse
+
+collapse :: Tree t -> [t]
+collapse NilT = []
+collapse (Node val left right) = (collapse left) ++ [val] ++ (collapse right)
+
+-- Função: bfs (a completar)
+
+-- Função: mapTree
+
+mapTree :: (t -> u) -> Tree t -> Tree u
+mapTree _ NilT = NilT
+mapTree f (Node val left right) = (Node (f val) (mapTree f left) (mapTree f right))

@@ -1,0 +1,15 @@
+## Arquivo: 20150324.hs ##
+  - Modificações: exercícios sobre compreensão de listas (banco de dados).
+
+## Arquivo: 20150326.hs ##
+  - Todos os exercícios da aula 3.
+
+## Arquivo: 20150407.hs ##
+  - Exercícios da última questão da aula 4 (exceto BFS).
+
+## Arquivo: 20150409.hs ##
+  - Primeiros exercícios da aula 5 envolvendo map e foldr, exceto as duas últimas questões sobre árvores.
+
+## Arquivos: 20150414.hs e 20150416.hs ## 
+  - Não houve alterações.
+
